@@ -1,0 +1,1624 @@
+﻿JMP main
+
+LABEL main
+
+PUSH 'gettimertime.function.result'
+JMP gettimertime.function.label
+LABEL gettimertime.function.result
+
+PUSH 'parsehours.function.result'
+COPY 2
+JMP parsehours.function.label
+LABEL parsehours.function.result
+
+PUSH 'writehours.function.result'
+COPY 2
+JMP writehours.function.label
+LABEL writehours.function.result
+
+PUSH 'extractminutes.function.result'
+COPY 3
+COPY 3
+JMP extractminutes.function.label
+LABEL extractminutes.function.result
+
+PUSH 'writeminutes.function.result'
+COPY 2
+JMP writeminutes.function.label
+LABEL writeminutes.function.result
+
+SWAP 1 3
+POP
+
+PUSH 'countdown.function.result'
+COPY 3
+COPY 3
+JMP countdown.function.label
+LABEL countdown.function.result
+
+JMP end
+
+
+
+LABEL countdown.function.label
+
+LABEL countdown.function.again
+
+PUSH 'drawhundertepmtylines.function.result'
+JMP drawhundertemptylines.function.label
+LABEL drawhundertepmtylines.function.result
+
+PUSH 'drawtimer.function.result'
+COPY 3
+COPY 3
+JMP drawtimer.function.label
+LABEL drawtimer.function.result
+
+PUSH 'makeapause.function.result'
+JMP makeapause.function.label
+LABEL makeapause.function.result
+
+PUSH 'decreasetimer.function.result'
+COPY 3
+COPY 3
+JMP decreasetimer.function.label
+LABEL decreasetimer.function.result
+SWAP 1 3
+SWAP 2 4
+POP
+POP
+
+PUSH 'countdown.function.end'
+PUSH 'countdown.function.again'
+COPY 4
+COPY 4
+JMP timeiszero.function.label
+
+
+
+LABEL countdown.function.end
+
+PUSH 'drawhundertepmtylines.function.result2'
+JMP drawhundertemptylines.function.label
+LABEL drawhundertepmtylines.function.result2
+
+PUSH 'drawtimer.function.result2'
+COPY 3
+COPY 3
+JMP drawtimer.function.label
+LABEL drawtimer.function.result2
+
+POP
+POP
+JMP
+
+LABEL timeiszero.function.label
+
+PUSH 'timeiszero.function.hoursiszero'
+PUSH 'timeiszero.function.false'
+COPY 3
+JMP numberisdoublezero.function.label
+
+LABEL timeiszero.function.hoursiszero
+
+PUSH 'timeiszero.function.hoursandminutesarezero'
+PUSH 'timeiszero.function.false'
+COPY 4
+JMP numberisdoublezero.function.label
+
+LABEL timeiszero.function.hoursandminutesarezero
+POP
+POP
+POP
+JMP
+
+LABEL timeiszero.function.false
+POP
+POP
+SWAP 1 2
+POP
+JMP
+
+
+LABEL numberisdoublezero.function.label
+
+PUSH 'numberisdoublezero.function.yes'
+PUSH 'numberisdoublezero.function.no'
+COPY 3
+PUSH '00'
+JMP equals.function.label
+
+LABEL numberisdoublezero.function.yes
+POP
+POP
+JMP
+
+LABEL numberisdoublezero.function.no
+POP
+SWAP 1 2
+POP
+JMP
+
+
+
+LABEL decreasenumber.function.label
+
+PUSH 'decrease.function.reverse.result1'
+COPY 2
+JMP reverse.function.label
+LABEL decrease.function.reverse.result1
+SWAP 1 2
+POP
+
+PUSH 'decrease.function.substract.result'
+COPY 2
+JMP substract.function.label
+LABEL decrease.function.substract.result
+SWAP 1 2
+POP
+
+PUSH 'decrease.function.reverse.result2'
+COPY 2
+JMP reverse.function.label
+LABEL decrease.function.reverse.result2
+SWAP 1 2
+POP
+
+SWAP 1 2
+JMP
+
+
+
+
+LABEL decreasetimer.function.label
+
+PUSH 'decreasetimer.function.donotcontinue'
+PUSH 'decreasetimer.function.continue'
+COPY 4
+COPY 4
+JMP timeiszero.function.label
+LABEL decreasetimer.function.donotcontinue
+
+SWAP 2 3
+SWAP 1 2
+JMP
+
+LABEL decreasetimer.function.continue
+
+PUSH 'decreasetimer.function.decreasehours'
+PUSH 'decreasetimer.function.decreaseminutes'
+COPY 4
+JMP numberisdoublezero.function.label
+
+LABEL decreasetimer.function.decreasehours
+
+PUSH 'decreasetimer.function.decreasehours.result'
+COPY 2
+JMP decreasenumber.function.label
+LABEL decreasetimer.function.decreasehours.result
+SWAP 1 2
+POP
+PUSH '59'
+SWAP 1 3
+POP
+JMP decreasetimer.function.end
+
+LABEL decreasetimer.function.decreaseminutes
+
+PUSH 'decreasetimer.function.decreaseminutes.result'
+COPY 3
+JMP decreasenumber.function.label
+LABEL decreasetimer.function.decreaseminutes.result
+SWAP 1 3
+POP
+JMP decreasetimer.function.end
+
+LABEL decreasetimer.function.end
+SWAP 1 3
+SWAP 2 3
+JMP
+
+
+LABEL makeapause.function.label
+PUSH 'recursivereplacinglettera.function.result'
+PUSH 'aaaaaaaaaaaaaaaa'
+JMP recursivereplacinglettera.function.label
+LABEL recursivereplacinglettera.function.result
+JMP
+
+
+LABEL recursivereplacinglettera.function.label
+PUSH 'recursivereplacinglettera.function.end'
+PUSH ''
+PUSH 'a'
+COPY 4
+REPLACEONE
+SWAP 1 2
+POP
+
+PUSH 'recursivereplacinglettera.function.internal1'
+COPY 2
+JMP recursivereplacinglettera.function.label
+LABEL recursivereplacinglettera.function.internal1
+
+PUSH 'recursivereplacinglettera.function.internal2'
+COPY 2
+JMP recursivereplacinglettera.function.label
+LABEL recursivereplacinglettera.function.internal2
+
+POP
+JMP
+
+LABEL recursivereplacinglettera.function.end
+POP
+POP
+JMP
+
+
+
+LABEL drawtimer.function.label
+PUSH ':'
+SWAP 1 2
+CONCAT
+CONCAT
+
+PUSH 'drawtopline.function.result'
+COPY 2
+JMP drawtopline.function.label
+LABEL drawtopline.function.result
+
+PUSH 'drawsecondline.function.result'
+COPY 2
+JMP drawsecondline.function.label
+LABEL drawsecondline.function.result
+
+PUSH 'drawthirdline.function.result'
+COPY 2
+JMP drawthirdline.function.label
+LABEL drawthirdline.function.result
+
+PUSH 'drawfourthline.function.result'
+COPY 2
+JMP drawfourthline.function.label
+LABEL drawfourthline.function.result
+
+PUSH 'drawfifthline.function.result'
+COPY 2
+JMP drawfifthline.function.label
+LABEL drawfifthline.function.result
+
+POP
+JMP
+
+
+
+LABEL drawhundertemptylines.function.label
+PUSH 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+
+LABEL drawhundertemptylines.function.repeat
+PUSH ''
+WRITE
+POP
+
+PUSH 'drawhundertemptylines.function.end'
+PUSH ''
+PUSH 'a'
+COPY 4
+REPLACEONE
+
+SWAP 1 2
+POP
+JMP drawhundertemptylines.function.repeat
+
+LABEL drawhundertemptylines.function.end
+POP
+POP
+JMP
+
+LABEL extractminutes.function.label
+PUSH ':'
+SWAP 1 2
+CONCAT
+PUSH ''
+PUSH 'fakemark'
+SWAP 1 4
+SWAP 2 3
+REPLACEONE
+SWAP 1 2
+JMP
+
+LABEL writehours.function.label
+PUSH 'hours: '
+CONCAT
+WRITE
+POP
+JMP
+
+LABEL writeminutes.function.label
+PUSH 'minutes: '
+CONCAT
+WRITE
+POP
+JMP
+
+LABEL gettimertime.function.label
+PUSH 'Введите время для таймера в формате MM:SS'
+WRITE
+POP
+READ
+SWAP 1 2
+JMP
+
+
+
+LABEL parsehours.function.label
+PUSH '#'
+CONCAT
+PUSH ''
+SWAP 1 2
+
+LABEL parsehours.function.tryagain
+
+PUSH 'parsehours.function.tryremove0success'
+PUSH 'parsehours.function.tryremove0failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand0.function.label
+
+LABEL parsehours.function.tryremove0success
+SWAP 1 2
+PUSH '0'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+
+LABEL parsehours.function.tryremove0failed
+
+PUSH 'parsehours.function.tryremove1success'
+PUSH 'parsehours.function.tryremove1failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand1.function.label
+
+LABEL parsehours.function.tryremove1success
+SWAP 1 2
+PUSH '1'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove1failed
+
+PUSH 'parsehours.function.tryremove2success'
+PUSH 'parsehours.function.tryremove2failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand2.function.label
+
+LABEL parsehours.function.tryremove2success
+SWAP 1 2
+PUSH '2'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove2failed
+
+PUSH 'parsehours.function.tryremove3success'
+PUSH 'parsehours.function.tryremove3failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand3.function.label
+
+LABEL parsehours.function.tryremove3success
+SWAP 1 2
+PUSH '3'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove3failed
+
+PUSH 'parsehours.function.tryremove4success'
+PUSH 'parsehours.function.tryremove4failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand4.function.label
+
+LABEL parsehours.function.tryremove4success
+SWAP 1 2
+PUSH '4'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove4failed
+
+PUSH 'parsehours.function.tryremove5success'
+PUSH 'parsehours.function.tryremove5failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand5.function.label
+
+LABEL parsehours.function.tryremove5success
+SWAP 1 2
+PUSH '5'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove5failed
+
+PUSH 'parsehours.function.tryremove6success'
+PUSH 'parsehours.function.tryremove6failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand6.function.label
+
+LABEL parsehours.function.tryremove6success
+SWAP 1 2
+PUSH '6'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove6failed
+
+PUSH 'parsehours.function.tryremove7success'
+PUSH 'parsehours.function.tryremove7failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand7.function.label
+
+LABEL parsehours.function.tryremove7success
+SWAP 1 2
+PUSH '7'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove7failed
+
+PUSH 'parsehours.function.tryremove8success'
+PUSH 'parsehours.function.tryremove8failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand8.function.label
+
+LABEL parsehours.function.tryremove8success
+SWAP 1 2
+PUSH '8'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove8failed
+
+PUSH 'parsehours.function.tryremove9success'
+PUSH 'parsehours.function.tryremove9failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand9.function.label
+
+LABEL parsehours.function.tryremove9success
+SWAP 1 2
+PUSH '9'
+SWAP 1 2
+CONCAT
+SWAP 1 2
+JMP parsehours.function.tryagain
+
+LABEL parsehours.function.tryremove9failed
+POP
+SWAP 1 2
+JMP
+
+
+
+LABEL removemarkerand0.function.label
+PUSH 'removemarkerand0.function.failed'
+PUSH '#'
+PUSH '#0'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand0.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand0.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand1.function.label
+PUSH 'removemarkerand1.function.failed'
+PUSH '#'
+PUSH '#1'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand1.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand1.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand2.function.label
+PUSH 'removemarkerand2.function.failed'
+PUSH '#'
+PUSH '#2'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand2.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand2.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand3.function.label
+PUSH 'removemarkerand3.function.failed'
+PUSH '#'
+PUSH '#3'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand3.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand3.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand4.function.label
+PUSH 'removemarkerand4.function.failed'
+PUSH '#'
+PUSH '#4'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand4.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand4.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand5.function.label
+PUSH 'removemarkerand5.function.failed'
+PUSH '#'
+PUSH '#5'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand5.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand5.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand6.function.label
+PUSH 'removemarkerand6.function.failed'
+PUSH '#'
+PUSH '#6'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand6.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand6.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand7.function.label
+PUSH 'removemarkerand7.function.failed'
+PUSH '#'
+PUSH '#7'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand7.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand7.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand8.function.label
+PUSH 'removemarkerand8.function.failed'
+PUSH '#'
+PUSH '#8'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand8.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand8.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+LABEL removemarkerand9.function.label
+PUSH 'removemarkerand9.function.failed'
+PUSH '#'
+PUSH '#9'
+COPY 4
+REPLACEONE
+
+LABEL removemarkerand9.function.success
+SWAP 1 2
+POP
+SWAP 1 2
+POP
+SWAP 1 2
+JMP
+
+LABEL removemarkerand9.function.failed
+POP
+SWAP 1 3
+POP
+JMP
+
+
+
+LABEL contains.function.label
+
+PUSH 'contains.function.false'
+COPY 3
+COPY 4
+COPY 4
+REPLACEONE
+
+LABEL contains.function.end
+POP
+POP
+POP
+POP
+JMP
+
+LABEL contains.function.false
+SWAP 4 5
+JMP contains.function.end
+
+
+
+LABEL equals.function.label
+
+PUSH 'equals.function.label1'
+PUSH 'equals.function.notequals'
+COPY 4
+COPY 4
+JMP contains.function.label
+
+LABEL equals.function.label1
+PUSH 'equals.function.equals'
+PUSH 'equal.function.notequals'
+COPY 3
+COPY 5
+JMP contains.function.label
+
+LABEL equals.function.equals
+POP
+POP
+POP
+JMP
+
+LABEL equals.function.notequals
+POP
+POP
+SWAP 1 2
+POP
+JMP
+
+LABEL reverse.function.label
+PUSH '#'
+CONCAT
+PUSH ''
+SWAP 1 2
+
+LABEL reverse.function.tryagain
+
+PUSH 'reverse.function.tryremove0success'
+PUSH 'reverse.function.tryremove0failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand0.function.label
+
+LABEL reverse.function.tryremove0success
+SWAP 1 2
+PUSH '0'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+
+LABEL reverse.function.tryremove0failed
+
+PUSH 'reverse.function.tryremove1success'
+PUSH 'reverse.function.tryremove1failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand1.function.label
+
+LABEL reverse.function.tryremove1success
+SWAP 1 2
+PUSH '1'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove1failed
+
+PUSH 'reverse.function.tryremove2success'
+PUSH 'reverse.function.tryremove2failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand2.function.label
+
+LABEL reverse.function.tryremove2success
+SWAP 1 2
+PUSH '2'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove2failed
+
+PUSH 'reverse.function.tryremove3success'
+PUSH 'reverse.function.tryremove3failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand3.function.label
+
+LABEL reverse.function.tryremove3success
+SWAP 1 2
+PUSH '3'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove3failed
+
+PUSH 'reverse.function.tryremove4success'
+PUSH 'reverse.function.tryremove4failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand4.function.label
+
+LABEL reverse.function.tryremove4success
+SWAP 1 2
+PUSH '4'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove4failed
+
+PUSH 'reverse.function.tryremove5success'
+PUSH 'reverse.function.tryremove5failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand5.function.label
+
+LABEL reverse.function.tryremove5success
+SWAP 1 2
+PUSH '5'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove5failed
+
+PUSH 'reverse.function.tryremove6success'
+PUSH 'reverse.function.tryremove6failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand6.function.label
+
+LABEL reverse.function.tryremove6success
+SWAP 1 2
+PUSH '6'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove6failed
+
+PUSH 'reverse.function.tryremove7success'
+PUSH 'reverse.function.tryremove7failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand7.function.label
+
+LABEL reverse.function.tryremove7success
+SWAP 1 2
+PUSH '7'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove7failed
+
+PUSH 'reverse.function.tryremove8success'
+PUSH 'reverse.function.tryremove8failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand8.function.label
+
+LABEL reverse.function.tryremove8success
+SWAP 1 2
+PUSH '8'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove8failed
+
+PUSH 'reverse.function.tryremove9success'
+PUSH 'reverse.function.tryremove9failed'
+SWAP 1 3
+SWAP 2 3
+JMP removemarkerand9.function.label
+
+LABEL reverse.function.tryremove9success
+SWAP 1 2
+PUSH '9'
+CONCAT
+SWAP 1 2
+JMP reverse.function.tryagain
+
+LABEL reverse.function.tryremove9failed
+POP
+SWAP 1 2
+JMP
+
+
+LABEL substract.function.label
+PUSH '#'
+CONCAT
+
+LABEL substract.function.tryagain
+
+PUSH 'substract.function.contains#0'
+PUSH 'substract.function.doesnotcontain#0'
+PUSH '#0'
+COPY 4
+JMP contains.function.label
+
+LABEL substract.function.contains#0
+PUSH 'substract.function.fakemark'
+PUSH '9#'
+PUSH '#0'
+COPY 4
+REPLACEONE
+SWAP 1 2
+POP
+JMP substract.function.tryagain
+
+LABEL substract.function.doesnotcontain#0
+
+PUSH 'substract.function.didnotreplace#1'
+
+PUSH '0'
+PUSH '#1'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#1
+POP
+
+PUSH 'substract.function.didnotreplace#2'
+PUSH '1'
+PUSH '#2'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#2
+POP
+
+PUSH 'substract.function.didnotreplace#3'
+PUSH '2'
+PUSH '#3'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#3
+POP
+
+PUSH 'substract.function.didnotreplace#4'
+PUSH '3'
+PUSH '#4'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#4
+POP
+
+PUSH 'substract.function.didnotreplace#5'
+PUSH '4'
+PUSH '#5'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#5
+POP
+
+PUSH 'substract.function.didnotreplace#6'
+PUSH '5'
+PUSH '#6'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#6
+POP
+
+PUSH 'substract.function.didnotreplace#7'
+PUSH '6'
+PUSH '#7'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#7
+POP
+
+PUSH 'substract.function.didnotreplace#8'
+PUSH '7'
+PUSH '#8'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#8
+POP
+
+PUSH 'substract.function.didnotreplace#9'
+PUSH '8'
+PUSH '#9'
+COPY 4
+REPLACEONE
+JMP substract.function.end
+
+LABEL substract.function.didnotreplace#9
+POP
+
+LABEL substract.function.end
+SWAP 1 3
+SWAP 1 2
+POP
+JMP
+
+
+LABEL drawtopline.function.label
+
+PUSH 'drawtopline.function.replaceall0'
+PUSH ' ▓▓▓▓'
+PUSH '0'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall0
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall1'
+PUSH '    ▓'
+PUSH '1'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall1
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall2'
+PUSH ' ▓▓▓▓'
+PUSH '2'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall2
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall3'
+PUSH ' ▓▓▓▓'
+PUSH '3'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall3
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall4'
+PUSH ' ▓  ▓'
+PUSH '4'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall4
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall5'
+PUSH ' ▓▓▓▓'
+PUSH '5'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall5
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall6'
+PUSH ' ▓▓▓▓'
+PUSH '6'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall6
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall7'
+PUSH ' ▓▓▓▓'
+PUSH '7'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall7
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall8'
+PUSH ' ▓▓▓▓'
+PUSH '8'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall8
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceall9'
+PUSH ' ▓▓▓▓'
+PUSH '9'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceall9
+SWAP 1 2
+POP
+
+PUSH 'drawtopline.function.replaceallpoints'
+PUSH '   '
+PUSH ':'
+COPY 4
+JMP replaceall.function.label
+LABEL drawtopline.function.replaceallpoints
+SWAP 1 2
+POP
+
+WRITE
+POP
+JMP
+
+
+LABEL drawsecondline.function.label
+
+PUSH 'drawsecondline.function.replaceall0'
+PUSH ' ▓  ▓'
+PUSH '0'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall0
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall1'
+PUSH '    ▓'
+PUSH '1'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall1
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall2'
+PUSH '    ▓'
+PUSH '2'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall2
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall3'
+PUSH '    ▓'
+PUSH '3'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall3
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall4'
+PUSH ' ▓  ▓'
+PUSH '4'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall4
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall5'
+PUSH ' ▓   '
+PUSH '5'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall5
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall6'
+PUSH ' ▓   '
+PUSH '6'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall6
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall7'
+PUSH '    ▓'
+PUSH '7'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall7
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall8'
+PUSH ' ▓  ▓'
+PUSH '8'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall8
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceall9'
+PUSH ' ▓  ▓'
+PUSH '9'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceall9
+SWAP 1 2
+POP
+
+PUSH 'drawsecondline.function.replaceallpoints'
+PUSH ' ▓ '
+PUSH ':'
+COPY 4
+JMP replaceall.function.label
+LABEL drawsecondline.function.replaceallpoints
+SWAP 1 2
+POP
+
+WRITE
+POP
+JMP
+
+
+LABEL drawthirdline.function.label
+
+PUSH 'drawthirdline.function.replaceall0'
+PUSH ' ▓  ▓'
+PUSH '0'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall0
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall1'
+PUSH '    ▓'
+PUSH '1'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall1
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall2'
+PUSH ' ▓▓▓▓'
+PUSH '2'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall2
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall3'
+PUSH ' ▓▓▓▓'
+PUSH '3'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall3
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall4'
+PUSH ' ▓▓▓▓'
+PUSH '4'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall4
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall5'
+PUSH ' ▓▓▓▓'
+PUSH '5'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall5
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall6'
+PUSH ' ▓▓▓▓'
+PUSH '6'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall6
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall7'
+PUSH '    ▓'
+PUSH '7'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall7
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall8'
+PUSH ' ▓▓▓▓'
+PUSH '8'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall8
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceall9'
+PUSH ' ▓▓▓▓'
+PUSH '9'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceall9
+SWAP 1 2
+POP
+
+PUSH 'drawthirdline.function.replaceallpoints'
+PUSH '   '
+PUSH ':'
+COPY 4
+JMP replaceall.function.label
+LABEL drawthirdline.function.replaceallpoints
+SWAP 1 2
+POP
+
+WRITE
+POP
+JMP
+
+
+
+LABEL drawfourthline.function.label
+
+PUSH 'drawfourthline.function.replaceall0'
+PUSH ' ▓  ▓'
+PUSH '0'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall0
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall1'
+PUSH '    ▓'
+PUSH '1'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall1
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall2'
+PUSH ' ▓   '
+PUSH '2'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall2
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall3'
+PUSH '    ▓'
+PUSH '3'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall3
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall4'
+PUSH '    ▓'
+PUSH '4'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall4
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall5'
+PUSH '    ▓'
+PUSH '5'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall5
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall6'
+PUSH ' ▓  ▓'
+PUSH '6'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall6
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall7'
+PUSH '    ▓'
+PUSH '7'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall7
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall8'
+PUSH ' ▓  ▓'
+PUSH '8'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall8
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceall9'
+PUSH '    ▓'
+PUSH '9'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceall9
+SWAP 1 2
+POP
+
+PUSH 'drawfourthline.function.replaceallpoints'
+PUSH ' ▓ '
+PUSH ':'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfourthline.function.replaceallpoints
+SWAP 1 2
+POP
+
+
+LABEL drawfifthline.function.label
+
+PUSH 'drawfifthline.function.replaceall0'
+PUSH ' ▓▓▓▓'
+PUSH '0'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall0
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall1'
+PUSH '    ▓'
+PUSH '1'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall1
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall2'
+PUSH ' ▓▓▓▓'
+PUSH '2'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall2
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall3'
+PUSH ' ▓▓▓▓'
+PUSH '3'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall3
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall4'
+PUSH '    ▓'
+PUSH '4'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall4
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall5'
+PUSH ' ▓▓▓▓'
+PUSH '5'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall5
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall6'
+PUSH ' ▓▓▓▓'
+PUSH '6'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall6
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall7'
+PUSH '    ▓'
+PUSH '7'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall7
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall8'
+PUSH ' ▓▓▓▓'
+PUSH '8'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall8
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceall9'
+PUSH ' ▓▓▓▓'
+PUSH '9'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceall9
+SWAP 1 2
+POP
+
+PUSH 'drawfifthline.function.replaceallpoints'
+PUSH '   '
+PUSH ':'
+COPY 4
+JMP replaceall.function.label
+LABEL drawfifthline.function.replaceallpoints
+SWAP 1 2
+POP
+
+WRITE
+POP
+JMP
+
+LABEL replaceall.function.label
+
+LABEL replaceall.function.tryagain
+
+PUSH 'replaceall.function.end'
+COPY 4
+COPY 4
+COPY 4
+REPLACEONE
+SWAP 1 2
+POP
+JMP replaceall.function.tryagain
+
+LABEL replaceall.function.end
+SWAP 1 4
+SWAP 4 5
+POP
+POP
+POP
+JMP
+
+
+
+
+LABEL end

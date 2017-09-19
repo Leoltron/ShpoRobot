@@ -1,0 +1,121 @@
+PUSH 'Q'
+PUSH 'Q'
+PUSH 'p'
+PUSH 'W'
+PUSH 'L'
+PUSH 's'
+PUSH 'w'
+PUSH 'W'
+PUSH 'M'
+PUSH 't'
+CONCAT
+CONCAT
+CONCAT
+CONCAT
+CONCAT
+CONCAT
+CONCAT
+CONCAT
+CONCAT
+WRITE
+PUSH 'fake.mark'
+PUSH 'JAaiJB'
+PUSH 'wsLWpQ'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'pPUjWE'
+PUSH 'AaiJBQ'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'nLcB'
+PUSH 'UjWE'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'ABdJy'
+PUSH 'MWJpP'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'Lc'
+PUSH 'cB'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'cfiggMVCUz'
+PUSH 'tABdJynLLc'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'Epg'
+PUSH 'gMV'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'yUpHDxGqL'
+PUSH 'figEpgCUz'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'TkOHxFTyy'
+PUSH 'yUpHDxGqL'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'D'
+PUSH 'c'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'FCKEu'
+PUSH 'xFTyy'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'Hvd'
+PUSH 'TkO'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'nH'
+PUSH 'HF'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'cXG'
+PUSH 'vdn'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'GehF'
+PUSH 'HcXG'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'cdVDcCEb'
+PUSH 'DGehFHCK'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'CxqjFg'
+PUSH 'VDcCEb'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'yRz'
+PUSH 'xqj'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'uUPsW'
+PUSH 'CyRzF'
+COPY 4
+REPLACEONE
+PUSH 'fake.mark'
+PUSH 'aQwfJkJz'
+PUSH 'cduUPsWg'
+COPY 4
+REPLACEONE
+WRITE
