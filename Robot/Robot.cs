@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace RobotTask
@@ -24,9 +23,9 @@ namespace RobotTask
         public Func<string> Read { get; private set; }
 
         public Dictionary<string, int> LabelDictionary;
-        public List<StringBuilder> Stack = new List<StringBuilder>();
-        public StringBuilder StackHead => Stack[StackHeadIndex];
-        public int StackHeadIndex;
+        public List<string> Stack = new List<string>();
+        public string StackHead => Stack[StackHeadIndex];
+        public int StackHeadIndex => Stack.Count-1;
 
         public List<Action> ProgramActions;
         public int Pointer;
@@ -60,7 +59,6 @@ namespace RobotTask
         {
             ProgramActions = new List<Action>(commands.Count);
             LabelDictionary = new Dictionary<string, int>();
-            StackHeadIndex = -1;
             ProgramActions = new CommandParser(this).ParseCommands(commands);
 
             for (Pointer = 0; Pointer < ProgramActions.Count; Pointer++)
@@ -76,25 +74,13 @@ namespace RobotTask
 
         public void Push(string s)
         {
-            StackHeadIndex++;
-            if (Stack.Count > StackHeadIndex)
-            {
-                Stack[StackHeadIndex].Clear();
-                Stack[StackHeadIndex].Append(s);
-            }
-            else
-                Stack.Add(new StringBuilder(s));
+            Stack.Add(s);
         }
 
-        public void Pop()
+        public string Pop()
         {
-            StackHeadIndex--;
-        }
-
-        public string PopAndReturn()
-        {
-            var head = StackHead.ToString();
-            Pop();
+            var head = StackHead;
+            Stack.RemoveAt(StackHeadIndex);
             return head;
         }
 
@@ -110,7 +96,7 @@ namespace RobotTask
 
         public void CopyAndPush(int index)
         {
-            Push(Stack[StackHeadIndex - index].ToString());
+            Push(Stack[StackHeadIndex - index]);
         }
 
         public void ReadAndPush()
@@ -120,12 +106,12 @@ namespace RobotTask
 
         public void WriteStackHead()
         {
-            Write(StackHead.ToString());
+            Write(StackHead);
         }
 
         public void JumpToStackHeadLabel()
         {
-            var label = StackHead.ToString();
+            var label = StackHead;
             JumpToLabel(label);
             Pop();
         }
@@ -139,32 +125,27 @@ namespace RobotTask
 
         public void ConcatTwoOnStackHead()
         {
-            var a = StackHead;
+            var a = Pop();
+            var b = Pop();
 
-            var bIndex = StackHeadIndex - 1;
-            var b = Stack[bIndex];
-
-            a.Append(b);
-
-            Swap(0, 1);
-            Pop();
+            Push(string.Concat(a , b));
         }
 
         public void ReplaceOne()
         {
-            Swap(0, 3);
-            var ret = PopAndReturn();
-            var b = PopAndReturn();
-            var c = PopAndReturn();
-            var a = StackHead;
+            var a = Pop();
+            var b = Pop();
+            var c = Pop();
+            var ret = Pop();
 
-            var ind = a.ToString().IndexOf(b, StringComparison.Ordinal);
+            var ind = a.IndexOf(b, StringComparison.Ordinal);
             if (ind == -1)
                 JumpToLabel(ret);
             else
-                a.Replace(b,c,ind,b.Length);
+                a = a.Remove(ind,b.Length).Insert(ind, c);
+            Push(a);
 
-            //Console.WriteLine($"DEBUG: Replacing in {a} ({b} to {c})  Success: {isSuccessfull}, ret:{ret}");
+            //Console.WriteLine($"DEBUG: Replacing in {a.Length} ({b.Length} to {c.Length})  Success: {ind}, ret:{ret}");
         }
     }
 
@@ -186,12 +167,12 @@ namespace RobotTask
             foreach (var method in typeof(CommandParser).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance))
             foreach (var attribute in method.GetCustomAttributes(typeof(CommandParserMethodAttribute), false))
                 if (attribute is CommandParserMethodAttribute a)
-                    {
-                        if(!IsParserMethod(method))
-                            throw new FormatException($"Методы с атрибутом {nameof(CommandParserMethodAttribute)} должны" +
-                                                      $"принимать строку и возвращать Action, метод {method.Name} нарушает эти условия.");
-                        parsers.Add(a.CommandName, s => method.Invoke(this, new object[] {s}) as Action);
-                    }
+                {
+                    if (!IsParserMethod(method))
+                        throw new FormatException($"Методы с атрибутом {nameof(CommandParserMethodAttribute)} должны" +
+                                                  $"принимать строку и возвращать Action, метод {method.Name} нарушает эти условия.");
+                    parsers.Add(a.CommandName, s => method.Invoke(this, new object[] {s}) as Action);
+                }
         }
 
         private static bool IsParserMethod(MethodInfo method)
@@ -237,7 +218,7 @@ namespace RobotTask
         private Action ParsePop(string argString)
         {
             AssertCommandArgsEmpty(argString, "POP");
-            return robot.Pop;
+            return () => robot.Pop();
         }
 
         private static readonly Regex pushArgumentRegEx = new Regex("'((''|[^'])*)'");

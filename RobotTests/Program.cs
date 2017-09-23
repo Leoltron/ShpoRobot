@@ -11,8 +11,8 @@ namespace RobotTests
     {
         static void Main(string[] args)
         {
-            RunTimer();
-            //RunOptimisationTests();
+            //RunTimer();
+            RunOptimisationTests();
         }
 
         private static void RunTimer()
