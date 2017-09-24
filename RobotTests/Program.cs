@@ -24,7 +24,7 @@ namespace RobotTests
         private static void RunOptimisationTests()
         {
             var l = new List<string>();
-            var dirpath = @"C:\Users\Leoltron\Documents\Visual Studio 2017\Projects\Robot\RobotTests\ForOptimizations";
+            const string dirpath = @"C:\Users\Leoltron\Documents\Visual Studio 2017\Projects\Robot\RobotTests\ForOptimizations";
             foreach (var path in Directory.GetFiles(dirpath))
             {
                 var testName = path.Substring(path.LastIndexOf("\\") + 1) + ":";

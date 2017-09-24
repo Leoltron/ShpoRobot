@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="IRobot.cs" />
     <Compile Include="Robot.cs" />
+    <Compile Include="StringRKExtensions.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="Robot_Tests.cs" />
     <Content Include="timer.txt" />

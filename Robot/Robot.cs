@@ -25,7 +25,7 @@ namespace RobotTask
         public Dictionary<string, int> LabelDictionary;
         public List<string> Stack = new List<string>();
         public string StackHead => Stack[StackHeadIndex];
-        public int StackHeadIndex => Stack.Count-1;
+        public int StackHeadIndex => Stack.Count - 1;
 
         public List<Action> ProgramActions;
         public int Pointer;
@@ -128,7 +128,7 @@ namespace RobotTask
             var a = Pop();
             var b = Pop();
 
-            Push(string.Concat(a , b));
+            Push(string.Concat(a, b));
         }
 
         public void ReplaceOne()
@@ -138,11 +138,11 @@ namespace RobotTask
             var c = Pop();
             var ret = Pop();
 
-            var ind = a.IndexOf(b, StringComparison.Ordinal);
+            var ind = a.RabinKarpIndexOf(b);
             if (ind == -1)
                 JumpToLabel(ret);
             else
-                a = a.Remove(ind,b.Length).Insert(ind, c);
+                a = a.Remove(ind, b.Length).Insert(ind, c);
             Push(a);
 
             //Console.WriteLine($"DEBUG: Replacing in {a.Length} ({b.Length} to {c.Length})  Success: {ind}, ret:{ret}");
