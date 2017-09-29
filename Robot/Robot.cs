@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
+using exercises;
+using NUnit.Framework.Constraints;
 
 namespace RobotTask
 {
@@ -24,11 +27,12 @@ namespace RobotTask
 
         public Dictionary<string, int> LabelDictionary;
         public List<string> Stack = new List<string>();
+
         public string StackHead => Stack[StackHeadIndex];
         public int StackHeadIndex => Stack.Count - 1;
 
-        public List<Action> ProgramActions;
-        public int Pointer;
+        public List<Action> ProgramInstructions;
+        public int InstructionPointer;
 
         public List<string> Evaluate(List<string> commands, IEnumerable<string> input)
         {
@@ -57,15 +61,15 @@ namespace RobotTask
 
         private void EvaluateInternal(List<string> commands)
         {
-            ProgramActions = new List<Action>(commands.Count);
+            ProgramInstructions = new List<Action>(commands.Count);
             LabelDictionary = new Dictionary<string, int>();
-            ProgramActions = new CommandParser(this).ParseCommands(commands);
+            ProgramInstructions = new CommandParser(this).ParseCommands(commands);
 
-            for (Pointer = 0; Pointer < ProgramActions.Count; Pointer++)
+            for (InstructionPointer = 0; InstructionPointer < ProgramInstructions.Count; InstructionPointer++)
             {
-                ProgramActions[Pointer](); /*
+                ProgramInstructions[InstructionPointer](); /*
                 Console.WriteLine("DEBUG: Executed command: " + 
-                    (commands[Pointer].Length > 30 ? commands[Pointer].Substring(0,30)+"..." : commands[Pointer]));
+                    (commands[InstructionPointer].Length > 30 ? commands[InstructionPointer].Substring(0,30)+"..." : commands[InstructionPointer]));
                 Console.WriteLine("DEBUG: \tStack: ");
                 for (int i = StackHeadIndex; i >= 0; i--)
                     Console.WriteLine("DEBUG: \t\t" + Stack[i]);*/
@@ -94,20 +98,11 @@ namespace RobotTask
             Stack[listIndexB] = reserved;
         }
 
-        public void CopyAndPush(int index)
-        {
-            Push(Stack[StackHeadIndex - index]);
-        }
+        public void CopyAndPush(int index) => Push(Stack[StackHeadIndex - index]);
 
-        public void ReadAndPush()
-        {
-            Push(Read());
-        }
+        public void ReadAndPush() => Push(Read());
 
-        public void WriteStackHead()
-        {
-            Write(StackHead);
-        }
+        public void WriteStackHead() => Write(StackHead);
 
         public void JumpToStackHeadLabel()
         {
@@ -120,7 +115,7 @@ namespace RobotTask
         {
             if (!LabelDictionary.ContainsKey(label))
                 throw new KeyNotFoundException($"Метки {label} не существует");
-            Pointer = LabelDictionary[label];
+            InstructionPointer = LabelDictionary[label];
         }
 
         public void ConcatTwoOnStackHead()
@@ -133,19 +128,27 @@ namespace RobotTask
 
         public void ReplaceOne()
         {
-            var a = Pop();
-            var b = Pop();
-            var c = Pop();
-            var ret = Pop();
+            var str = Pop();                //a
+            var pattern = Pop();            //b
+            var replacement = Pop();        //c
+            var failureReturnLabel = Pop(); //ret
 
-            var ind = a.RabinKarpIndexOf(b);
+            var ind = str.IndexOf(pattern);
             if (ind == -1)
-                JumpToLabel(ret);
+                JumpToLabel(failureReturnLabel);
             else
-                a = a.Remove(ind, b.Length).Insert(ind, c);
-            Push(a);
+                str =str.Remove(ind, pattern.Length).Insert(ind, replacement);
+            Push(str);
 
             //Console.WriteLine($"DEBUG: Replacing in {a.Length} ({b.Length} to {c.Length})  Success: {ind}, ret:{ret}");
+        }
+
+        private static string ReplaceAt(string str, int start, int length, string replacement)
+        {
+            var sb = new StringBuilder(str);
+            sb.Remove(start, length);
+            sb.Insert(start, replacement);
+            return sb.ToString();
         }
     }
 
@@ -168,11 +171,16 @@ namespace RobotTask
             foreach (var attribute in method.GetCustomAttributes(typeof(CommandParserMethodAttribute), false))
                 if (attribute is CommandParserMethodAttribute a)
                 {
-                    if (!IsParserMethod(method))
-                        throw new FormatException($"Методы с атрибутом {nameof(CommandParserMethodAttribute)} должны" +
-                                                  $"принимать строку и возвращать Action, метод {method.Name} нарушает эти условия.");
+                    CheckParserMethod(method);
                     parsers.Add(a.CommandName, s => method.Invoke(this, new object[] {s}) as Action);
                 }
+        }
+
+        private static void CheckParserMethod(MethodInfo method)
+        {
+            if (!IsParserMethod(method))
+                throw new FormatException($"Методы с атрибутом {nameof(CommandParserMethodAttribute)} должны" +
+                                          $"принимать строку и возвращать Action, метод {method.Name} нарушает эти условия.");
         }
 
         private static bool IsParserMethod(MethodInfo method)
@@ -185,25 +193,40 @@ namespace RobotTask
 
         public List<Action> ParseCommands(List<string> stringList)
         {
-            var commands = stringList
-                .Where(commandString => !string.IsNullOrEmpty(commandString) && !char.IsWhiteSpace(commandString[0]))
-                .ToList();
-            var parsedCommands = new List<Action>(commands.Count);
-            fixedJumps = new List<Tuple<int, string>>();
-            for (currentIndex = 0; currentIndex < commands.Count; currentIndex++)
-                parsedCommands.Add(Parse(commands[currentIndex]));
-
-            foreach (var fixedJump in fixedJumps)
-            {
-                var index = fixedJump.Item1;
-                var label = fixedJump.Item2;
-                parsedCommands[index] = () => robot.Pointer = robot.LabelDictionary[label];
-            }
+            var commands = FilterCommands(stringList);
+            var parsedCommands = ParseFilteredCommands(commands);
+            DecodeFixedJumps(parsedCommands);
 
             return parsedCommands;
         }
 
-        private Action Parse(string line)
+        private static List<string> FilterCommands(List<string> rawCommandStrings)
+        {
+            return rawCommandStrings
+                .Where(s => !string.IsNullOrEmpty(s) && !char.IsWhiteSpace(s[0]))
+                .ToList();
+        }
+
+        private List<Action> ParseFilteredCommands(List<string> commands)
+        {
+            fixedJumps = new List<Tuple<int, string>>();
+            var parsedCommands = new List<Action>(commands.Count);
+            for (currentIndex = 0; currentIndex < commands.Count; currentIndex++)
+                parsedCommands.Add(ParseCommandString(commands[currentIndex]));
+            return parsedCommands;
+        }
+
+        private void DecodeFixedJumps(IList<Action> parsedCommands)
+        {
+            foreach (var fixedJump in fixedJumps)
+            {
+                var index = fixedJump.Item1;
+                var label = fixedJump.Item2;
+                parsedCommands[index] = () => robot.InstructionPointer = robot.LabelDictionary[label];
+            }
+        }
+
+        private Action ParseCommandString(string line)
         {
             var splittedLine = line.Split(new[] {' '}, 2);
             var command = splittedLine[0];
@@ -227,11 +250,8 @@ namespace RobotTask
         private Action ParsePush(string argString)
         {
             var match = pushArgumentRegEx.Match(argString);
-
             CheckPushMatch(argString, match);
-
             var stringToPush = match.Groups[1].Value.Replace("''", "'");
-
             return () => robot.Push(stringToPush);
         }
 
@@ -263,7 +283,6 @@ namespace RobotTask
 
         private static readonly Regex swapArgumentRegEx = new Regex(@"^([\d]+) ([\d]+)$");
 
-
         [CommandParserMethod("SWAP")]
         private Action ParseSwap(string argString)
         {
@@ -287,7 +306,6 @@ namespace RobotTask
                 throw new FormatException();
 
             var index = int.Parse(match.Groups[1].Value);
-
             return () => robot.CopyAndPush(index - 1);
         }
 
@@ -298,7 +316,6 @@ namespace RobotTask
                 throw new FormatException("Аргумент команды LABEL не может быть пустым!");
 
             robot.LabelDictionary.Add(argString, currentIndex);
-
             return emptyAction;
         }
 
