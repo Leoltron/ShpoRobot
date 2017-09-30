@@ -4,8 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
-using exercises;
-using NUnit.Framework.Constraints;
 
 namespace RobotTask
 {
@@ -22,17 +20,17 @@ namespace RobotTask
 
     public class Robot : IRobot
     {
-        public Action<string> Write { get; private set; }
-        public Func<string> Read { get; private set; }
+        private Action<string> Write { get; set; }
+        private Func<string> Read { get; set; }
 
-        public Dictionary<string, int> LabelDictionary;
-        public List<string> Stack = new List<string>();
+        internal Dictionary<string, int> LabelDictionary;
+        private readonly List<string> stack = new List<string>();
 
-        public string StackHead => Stack[StackHeadIndex];
-        public int StackHeadIndex => Stack.Count - 1;
+        private string StackHead => stack[StackHeadIndex];
+        private int StackHeadIndex => stack.Count - 1;
 
-        public List<Action> ProgramInstructions;
-        public int InstructionPointer;
+        private List<Action> programInstructions;
+        internal int InstructionPointer;
 
         public List<string> Evaluate(List<string> commands, IEnumerable<string> input)
         {
@@ -48,6 +46,7 @@ namespace RobotTask
 
             EvaluateInternal(commands);
             enumerator.Dispose();
+
             return output;
         }
 
@@ -61,30 +60,23 @@ namespace RobotTask
 
         private void EvaluateInternal(List<string> commands)
         {
-            ProgramInstructions = new List<Action>(commands.Count);
+            programInstructions = new List<Action>(commands.Count);
             LabelDictionary = new Dictionary<string, int>();
-            ProgramInstructions = new CommandParser(this).ParseCommands(commands);
+            programInstructions = new CommandParser(this).ParseCommands(commands);
 
-            for (InstructionPointer = 0; InstructionPointer < ProgramInstructions.Count; InstructionPointer++)
-            {
-                ProgramInstructions[InstructionPointer](); /*
-                Console.WriteLine("DEBUG: Executed command: " + 
-                    (commands[InstructionPointer].Length > 30 ? commands[InstructionPointer].Substring(0,30)+"..." : commands[InstructionPointer]));
-                Console.WriteLine("DEBUG: \tStack: ");
-                for (int i = StackHeadIndex; i >= 0; i--)
-                    Console.WriteLine("DEBUG: \t\t" + Stack[i]);*/
-            }
+            for (InstructionPointer = 0; InstructionPointer < programInstructions.Count; InstructionPointer++)
+                programInstructions[InstructionPointer]();
         }
 
         public void Push(string s)
         {
-            Stack.Add(s);
+            stack.Add(s);
         }
 
         public string Pop()
         {
             var head = StackHead;
-            Stack.RemoveAt(StackHeadIndex);
+            stack.RemoveAt(StackHeadIndex);
             return head;
         }
 
@@ -93,12 +85,12 @@ namespace RobotTask
             var listIndexA = StackHeadIndex - indexA;
             var listIndexB = StackHeadIndex - indexB;
 
-            var reserved = Stack[listIndexA];
-            Stack[listIndexA] = Stack[listIndexB];
-            Stack[listIndexB] = reserved;
+            var reserved = stack[listIndexA];
+            stack[listIndexA] = stack[listIndexB];
+            stack[listIndexB] = reserved;
         }
 
-        public void CopyAndPush(int index) => Push(Stack[StackHeadIndex - index]);
+        public void CopyAndPush(int index) => Push(stack[StackHeadIndex - index]);
 
         public void ReadAndPush() => Push(Read());
 
@@ -128,27 +120,18 @@ namespace RobotTask
 
         public void ReplaceOne()
         {
-            var str = Pop();                //a
-            var pattern = Pop();            //b
-            var replacement = Pop();        //c
+            var str = Pop(); //a
+            var pattern = Pop(); //b
+            var replacement = Pop(); //c
             var failureReturnLabel = Pop(); //ret
 
-            var ind = str.IndexOf(pattern);
+            var ind = str.BoyerMooreIndexOf(pattern);
             if (ind == -1)
                 JumpToLabel(failureReturnLabel);
             else
-                str =str.Remove(ind, pattern.Length).Insert(ind, replacement);
+                str = str.ReplaceAt(ind, pattern.Length, replacement);
+
             Push(str);
-
-            //Console.WriteLine($"DEBUG: Replacing in {a.Length} ({b.Length} to {c.Length})  Success: {ind}, ret:{ret}");
-        }
-
-        private static string ReplaceAt(string str, int start, int length, string replacement)
-        {
-            var sb = new StringBuilder(str);
-            sb.Remove(start, length);
-            sb.Insert(start, replacement);
-            return sb.ToString();
         }
     }
 
@@ -179,8 +162,9 @@ namespace RobotTask
         private static void CheckParserMethod(MethodInfo method)
         {
             if (!IsParserMethod(method))
-                throw new FormatException($"Методы с атрибутом {nameof(CommandParserMethodAttribute)} должны" +
-                                          $"принимать строку и возвращать Action, метод {method.Name} нарушает эти условия.");
+                throw new FormatException($"Методы с атрибутом {nameof(CommandParserMethodAttribute)}" +
+                                          $" должны принимать строку и возвращать Action, метод " +
+                                          $"{method.Name} нарушает эти условия.");
         }
 
         private static bool IsParserMethod(MethodInfo method)
@@ -346,6 +330,133 @@ namespace RobotTask
         {
             if (!string.IsNullOrEmpty(argString))
                 throw new ArgumentException($"Команда {commandName} не принимает аргументов");
+        }
+    }
+
+    internal static class BoyerMooreSearch
+    {
+        public static int BoyerMooreIndexOf(this string str, string pattern)
+        {
+            if (str.Length < pattern.Length)
+                return -1;
+
+            var suffixTable = BuildSuffixTable(pattern).Reverse().ToArray();
+
+            var stopSymbolsTable = BuildStopSymbolsTable(pattern);
+
+            for (var i = pattern.Length - 1; i < str.Length;)
+            {
+                var countResult = CountEqualSymbolsFromEnd(str, pattern, i);
+
+                if (countResult.Item1 == pattern.Length)
+                    return i - pattern.Length + 1;
+
+                var suffixShift = suffixTable[countResult.Item1];
+                var stopSymbolShift = countResult.Item2 + 1 -
+                                      stopSymbolsTable.ElementAtOrDefault(str[countResult.Item3], 0);
+
+                i += Math.Max(suffixShift, stopSymbolShift);
+            }
+            return -1;
+        }
+
+        private static int[] GetPrefixFunction(string str)
+        {
+            var pi = new int[str.Length];
+            pi[0] = 0;
+            var k = 0;
+            for (var i = 1; i < str.Length; i++)
+            {
+                while (k > 0 && str[k] != str[i])
+                    k = pi[k - 1];
+                if (str[k] == str[i])
+                    k++;
+                pi[i] = k;
+            }
+            return pi;
+        }
+
+        private static int[] GetSuffixFunction(string str)
+        {
+            return GetPrefixFunction(ReverseString(str));
+        }
+
+        private static string ReverseString(string str)
+        {
+            return new string(str.ToCharArray().Reverse().ToArray());
+        }
+
+        private static Tuple<int, int, int> CountEqualSymbolsFromEnd(string str, string pattern, int endIndex)
+        {
+            var patternLen = pattern.Length;
+            var equalSymbolsCount = 0;
+
+            var stopPatternIndex = 0;
+            var i = endIndex;
+            var startIndex = endIndex - patternLen;
+
+            for (; i > startIndex; i--)
+            {
+                stopPatternIndex = patternLen - 1 - equalSymbolsCount;
+                if (str[i] == pattern[stopPatternIndex])
+                    equalSymbolsCount++;
+                else
+                    break;
+            }
+            return Tuple.Create(equalSymbolsCount, stopPatternIndex, i);
+        }
+
+        private static int[] BuildSuffixTable(string pattern)
+        {
+            var patternLength = pattern.Length;
+            var suffixShiftTable = new int[patternLength + 1];
+
+            var prefFunc = new int[patternLength + 1];
+            GetPrefixFunction(pattern).CopyTo(prefFunc, 1);
+            var suffixFunc = new int[patternLength + 1];
+            GetSuffixFunction(pattern).CopyTo(suffixFunc, 1);
+
+            int j;
+            for (j = 0; j <= patternLength; j++)
+                suffixShiftTable[j] = patternLength - prefFunc[patternLength];
+            for (var i = 1; i <= patternLength; i++)
+            {
+                j = patternLength - suffixFunc[i];
+                suffixShiftTable[j] = Math.Min(suffixShiftTable[j], i - suffixFunc[i]);
+            }
+            return suffixShiftTable;
+        }
+
+        private static Dictionary<char, int> BuildStopSymbolsTable(string pattern)
+        {
+            var table = new Dictionary<char, int>();
+            for (var i = pattern.Length - 2; i >= 0; i--)
+            {
+                var charAtI = pattern[i];
+                if (!table.ContainsKey(charAtI))
+                    table[charAtI] = i + 1;
+            }
+            return table;
+        }
+    }
+
+    internal static class DictExtensions
+    {
+        public static TValue ElementAtOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict,
+            TKey key, TValue defaultValue)
+        {
+            return dict.ContainsKey(key) ? dict[key] : defaultValue;
+        }
+    }
+
+    internal static class StringExtensions
+    {
+        public static string ReplaceAt(this string str, int start, int length, string replacement)
+        {
+            var sb = new StringBuilder(str);
+            sb.Remove(start, length);
+            sb.Insert(start, replacement);
+            return sb.ToString();
         }
     }
 }
